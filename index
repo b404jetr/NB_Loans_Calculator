@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NoBroker Loans - EMI Savings Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #ff1744 0%, #d50000 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      max-width: 500px;
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+    }
+
+    .header {
+      background: white;
+      padding: 20px 30px;
+      text-align: center;
+      border-bottom: 1px solid #f0f0f0;
+      position: relative;
+    }
+
+  .logo {
+  display: block;
+  height: 180px;
+  max-height: 200px;
+  margin: 0 auto -75px auto; /* center horizontally + space below */
+}
+
+    .header h1 {
+      font-size: 24px;
+      color: #333;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step h3 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: #ff1744;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(255, 23, 68, 0.1);
+    }
+
+    .input-group small {
+      display: block;
+      margin-top: 5px;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .input-group .warning {
+      display: block;
+      margin-top: 5px;
+      color: #d32f2f;
+      font-size: 11px;
+      font-weight: 300;
+    }
+
+    .KHATA-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .KHATA-option {
+      padding: 12px 15px;
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .KHATA-option:hover {
+      background: #ffebee;
+      border-color: #ff1744;
+    }
+
+    .KHATA-option.selected {
+      background: #ff1744;
+      color: white;
+      border-color: #ff1744;
+    }
+
+    .bank-category {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .category-option {
+      flex: 1;
+      padding: 15px;
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .category-option:hover {
+      background: #ffebee;
+      border-color: #ff1744;
+    }
+
+    .category-option.selected {
+      background: #ff1744;
+      color: white;
+      border-color: #ff1744;
+    }
+
+    .category-option h4 {
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .category-option p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #ff1744;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #d50000;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(255, 23, 68, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    .btn-success {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #45a049;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: #f0f0f0;
+      border-radius: 2px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #ff1744;
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    .loader {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .loader-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ff1744;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-msg {
+      background: #ffebee;
+      color: #c62828;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .success-msg {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .result-section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .final-result {
+      background: #f5f5f5;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .result-card {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .result-card h5 {
+      color: #666;
+      margin-bottom: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .result-card .value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .result-card.highlight {
+      background: #ff1744;
+      color: white;
+    }
+
+    .result-card.highlight h5 {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .result-card.highlight .value {
+      color: white;
+    }
+
+    .result-card.success {
+      background: #e8f5e9;
+      border: 1px solid #4caf50;
+    }
+
+    .result-card.success .value {
+      color: #2e7d32;
+    }
+
+    .callback-form {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .callback-form h4 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .thank-you {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .thank-you h2 {
+      color: #ff1744;
+      margin-bottom: 20px;
+    }
+
+    .thank-you p {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    .thank-you .icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .powered-by {
+      text-align: center;
+      padding: 15px;
+      color: #999;
+      font-size: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    @media (max-width: 480px) {
+      .bank-category {
+        flex-direction: column;
+      }
+      
+      .container {
+        margin: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+     <img class="logo" src="https://i.ibb.co/7dDCb9yx/Untitled-design-2.png" alt="NoBroker Logo" />
+      <h1>Reduce Your Home Loan EMI</h1>
+      <p>Get the best rates from 20+ banks</p>
+    </div>
+
+    <div class="content">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+      </div>
+
+      <!-- Step 1: Credit Score -->
+      <div class="step active" id="step1">
+        <h3>What's your credit score?</h3>
+        <div class="input-group">
+          <label>Enter your CIBIL/Credit score</label>
+          <input type="number" id="creditScore" min="300" max="900" placeholder="e.g., 750" />
+          <small>Credit score should be between 300 and 900</small>
+        </div>
+        <div class="btns">
+          <button class="btn btn-primary" onclick="nextStep(1)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Total Loan Amount -->
+      <div class="step" id="step2">
+        <h3>Total loan amount sanctioned</h3>
+        <div class="input-group">
+          <label>Enter amount in Lakhs (₹)</label>
+          <input type="number" id="loanAmount" step="0.1" placeholder="e.g., 45.5" />
+          <small>Original loan amount sanctioned by bank</small>
+          <span class="warning" id="loanAmountWarning" style="display: none;">⚠️ Enter only the lakh value (e.g., 45.5 for ₹45,50,000)</span>
+        </div>
+        <div class="btns">
+          <button class="btn btn-secondary" onclick="backStep(2)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(2)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Current ROI -->
+      <div class="step" id="step3">
+        <h3>Your current interest rate</h3>
+        <div class="input-group">
+          <label>Enter your current ROI (%)</label>
+          <input type="number" id="currentROI" step="0.01" placeholder="e.g., 8.5" />
+          <small>Check your loan statement for current rate</small>
+        </div>
+        <div class="btns">
+          <button class="btn btn-secondary" onclick="backStep(3)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(3)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Total Tenure -->
+      <div class="step" id="step4">
+        <h3>Total loan tenure</h3>
+        <div class="input-group">
+          <label>Enter total tenure in years</label>
+          <input type="number" id="totalTenure" step="0.1" placeholder="e.g., 20" />
+          <small>Total loan duration sanctioned by bank</small>
+        </div>
+        <div class="btns">
+          <button class="btn btn-secondary" onclick="backStep(4)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(4)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Remaining Tenure -->
+      <div class="step" id="step5">
+        <h3>Remaining tenure</h3>
+        <div class="input-group">
+          <label>Enter remaining years</label>
+          <input type="number" id="remainingTenure" step="0.1" placeholder="e.g., 15" />
+          <small>Years left to complete the loan</small>
+        </div>
+        <div class="btns">
+          <button class="btn btn-secondary" onclick="backStep(5)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(5)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 6: KHATA Type -->
+      <div class="step" id="step6">
+        <h3>Select your property's KHATA type</h3>
+        <div class="KHATA-options" id="KHATAOptions">
+          <div class="KHATA-option" data-value="A">A KHATA</div>
+          <div class="KHATA-option" data-value="B">E KHATA(11/A)</div>
+          <div class="KHATA-option" data-value="C">B KHATA</div>
+          <div class="KHATA-option" data-value="D">DC</div>
+          <div class="KHATA-option" data-value="E">GP PROPERTY</div>
+        </div>
+        <div class="btns">
+          <button class="btn btn-secondary" onclick="backStep(6)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(6)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 7: Bank Category -->
+      <div class="step" id="step7">
+        <h3>Preferred bank category</h3>
+        <div class="bank-category" id="bankCategory">
+          <div class="category-option" data-value="G">
+            <h4>Nationalised</h4>
+            <p>Government banks only</p>
+          </div>
+          <div class="category-option" data-value="F">
+            <h4>All Banks</h4>
+            <p>Best rates from all banks</p>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn btn-secondary" onclick="backStep(7)">Back</button>
+          <button class="btn btn-primary" onclick="calculateFinalResult()">Show Results</button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <p>Finding the best rates for you...</p>
+        <p style="font-size: 13px; color: #999; margin-top: 10px;">Comparing 20+ banks</p>
+      </div>
+
+      <!-- Final Result -->
+      <div class="result-section" id="finalResult">
+        <div class="final-result">
+          <div class="result-card">
+            <h5>Your Current EMI</h5>
+            <div class="value" id="currentEMI">₹0</div>
+          </div>
+          <div class="result-card highlight">
+            <h5>Best Available EMI</h5>
+            <div class="value" id="bestEMI">₹0</div>
+          </div>
+          <div class="result-card">
+            <h5>Recommended Bank</h5>
+            <div class="value" id="bestBank">-</div>
+          </div>
+          <div class="result-card">
+            <h5>Best ROI Available</h5>
+            <div class="value" id="bestROI">0%</div>
+          </div>
+          <div class="result-card success">
+            <h5>Monthly Savings</h5>
+            <div class="value" id="monthlySavings">₹0</div>
+          </div>
+          <div class="result-card success">
+            <h5>Total Savings</h5>
+            <div class="value" id="totalSavings">₹0</div>
+          </div>
+        </div>
+        <div class="btns">
+         <button class="btn btn-secondary" onclick="reloadAndRestart()">Calculate Again</button>
+
+          <button class="btn btn-success" onclick="showCallbackForm()">Get Expert Help</button>
+        </div>
+      </div>
+
+      <!-- Callback Form -->
+      <div class="result-section" id="callbackForm">
+        <div class="callback-form">
+          <h4>Get Expert Assistance</h4>
+          <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 14px;">Our loan expert will help you switch to the best rate</p>
+          <div class="input-group">
+            <label>Your Name *</label>
+            <input type="text" id="userName" placeholder="Enter your full name" required />
+          </div>
+          <div class="input-group">
+            <label>Email ID *</label>
+            <input type="email" id="userEmail" placeholder="Enter your email" required />
+          </div>
+          <div class="input-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="userPhone" placeholder="10-digit mobile number" maxlength="10" required />
+          </div>
+          <div class="btns">
+            <button class="btn btn-secondary" onclick="backToResults()">Back</button>
+            <button class="btn btn-primary" onclick="submitCallback()">Submit</button>
+          </div>
+        </div>
+        <div class="error-msg" id="formError"></div>
+        <div class="success-msg" id="formSuccess"></div>
+      </div>
+
+      <!-- Thank You -->
+      <div class="result-section" id="thankYou">
+        <div class="thank-you">
+          <div class="icon">✅</div>
+          <h2>Thank You!</h2>
+          <p>Your request has been submitted successfully.</p>
+          <p>Our loan expert will contact you within 24 hours.</p>
+          <p style="font-size: 13px; color: #999;">Redirecting in <span id="countdown">5</span> seconds...</p>
+        </div>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+    
+    <div class="powered-by">
+      Powered by NoBroker Loans
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const BANKDATA_API_URL = 'https://script.google.com/macros/s/AKfycbwABGWMwVKIB0MzBwDKhHf3Ebgm9pzNwR6JIKW3iirN7-gvm70lztLOwNfICydfFjNB/exec';
+    const LEADS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbJdVo0NyU0YRVic9PdNRgy7BuqbvmGzUIt46wEXQhhuRg-gfm6NBhaz7Cj38QK7hj/exec';
+    
+    let bankData = [];
+    let selectedCreditScore = null;
+    let selectedKHATA = null;
+    let selectedCategory = null;
+    let calculationData = {};
+    let dataLoaded = false;
+
+    // Load bank data on page load
+    window.onload = function() {
+      setupEventListeners();
+      loadBankData();
+    };
+
+    function loadBankData(callback) {
+      // Show loading indicator
+      console.log('Loading bank data from API...');
+      console.log('API URL:', BANKDATA_API_URL);
+      
+      // Clear existing data
+      bankData = [];
+      dataLoaded = false;
+      
+      // Check if API URL is configured
+      if (BANKDATA_API_URL) {
+        // No cache headers needed - Apps Script always returns fresh data
+        fetch(BANKDATA_API_URL)
+          .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+              throw new Error('Network response was not ok: ' + response.status);
+            }
+            return response.json();
+          })
+          .then(result => {
+            console.log('API Response:', result);
+            
+            if (result.status === 'success' && result.data) {
+              // Process the data
+              bankData = result.data.map(row => {
+                // Ensure numeric fields are properly converted
+                return {
+                  ...row,
+                  'SCORE MIN': parseFloat(row['SCORE MIN']) || 0,
+                  'SCORE MAX': parseFloat(row['SCORE MAX']) || 900,
+                  'ROI': parseFloat(row['ROI']) || 0,
+                  'PROCESSING FEE': parseFloat(row['PROCESSING FEE']) || 0,
+                  '% MODT': parseFloat(row['% MODT']) || 0
+                };
+              });
+              
+              dataLoaded = true;
+              console.log('Bank data loaded successfully:', bankData.length, 'records');
+              console.log('Data timestamp:', result.timestamp);
+              console.log('Sample record:', bankData[0]);
+              if (typeof callback === 'function') callback();
+              hideError();
+            } else {
+              throw new Error('Invalid data format received: ' + JSON.stringify(result));
+            }
+          })
+          .catch(error => {
+            console.error('Error loading bank data from API:', error);
+            console.log('Falling back to embedded data...');
+            // Fallback to embedded data
+            useEmbeddedData();
+            if (typeof callback === 'function') callback();
+          });
+      } else {
+        // Use embedded data as fallback
+        console.log('No API URL configured, using embedded data as fallback');
+        useEmbeddedData();
+        if (typeof callback === 'function') callback();
+      }
+    }
+
+    function useEmbeddedData() {
+      // Embedded data as fallback
+      bankData = [
+        {"BANK":"HDFC","SCORE MIN":800,"SCORE MAX":900,"ROI":7.6,"PROCESSING FEE":10000,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","D":"DC","F":"NEUTRAL"},
+        {"BANK":"HDFC","SCORE MIN":750,"SCORE MAX":799,"ROI":7.8,"PROCESSING FEE":10000,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","D":"DC","F":"NEUTRAL"},
+        {"BANK":"HDFC","SCORE MIN":700,"SCORE MAX":749,"ROI":8,"PROCESSING FEE":10000,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","D":"DC","F":"NEUTRAL"},
+        {"BANK":"ICICI","SCORE MIN":800,"SCORE MAX":900,"ROI":8,"PROCESSING FEE":20900,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","D":"DC","E":"GP PROPERTY","F":"NEUTRAL"},
+        {"BANK":"ICICI","SCORE MIN":750,"SCORE MAX":799,"ROI":8.1,"PROCESSING FEE":20900,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","D":"DC","E":"GP PROPERTY","F":"NEUTRAL"},
+        {"BANK":"AXIS","SCORE MIN":750,"SCORE MAX":900,"ROI":7.95,"PROCESSING FEE":20000,"% MODT":0.45,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL"},
+        {"BANK":"KOTAK","SCORE MIN":800,"SCORE MAX":900,"ROI":8.05,"PROCESSING FEE":10000,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL"},
+        {"BANK":"SBI","SCORE MIN":825,"SCORE MAX":900,"ROI":7.5,"PROCESSING FEE":42300,"% MODT":0.6,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL","G":"NATIONALISED"},
+        {"BANK":"SBI","SCORE MIN":750,"SCORE MAX":824,"ROI":7.7,"PROCESSING FEE":42300,"% MODT":0.6,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL","G":"NATIONALISED"},
+        {"BANK":"BOB","SCORE MIN":825,"SCORE MAX":900,"ROI":7.5,"PROCESSING FEE":34000,"% MODT":0.6,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL","G":"NATIONALISED"},
+        {"BANK":"CANARA","SCORE MIN":800,"SCORE MAX":900,"ROI":7.8,"PROCESSING FEE":2950,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL","G":"NATIONALISED"},
+        {"BANK":"PNB","SCORE MIN":800,"SCORE MAX":900,"ROI":7.95,"PROCESSING FEE":10000,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","F":"NEUTRAL","G":"NATIONALISED"},
+        {"BANK":"BAJAJ","SCORE MIN":825,"SCORE MAX":900,"ROI":7.75,"PROCESSING FEE":0,"% MODT":0.99,"A":"A KHATA","B":"E KHATA(11/A)","C":"B KHATA","D":"DC","E":"GP PROPERTY","F":"NEUTRAL"},
+        {"BANK":"PNB HOUSING","SCORE MIN":750,"SCORE MAX":900,"ROI":8.15,"PROCESSING FEE":10000,"% MODT":0.5,"A":"A KHATA","B":"E KHATA(11/A)","C":"B KHATA","D":"DC","E":"GP PROPERTY","F":"NEUTRAL"}
+      ];
+      dataLoaded = true;
+      console.log('Using embedded bank data:', bankData.length, 'records');
+    }
+
+    function setupEventListeners() {
+      // KHATA type selection
+      document.querySelectorAll('.KHATA-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.KHATA-option').forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedKHATA = this.dataset.value;
+        });
+      });
+
+      // Bank category selection
+      document.querySelectorAll('.category-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedCategory = this.dataset.value;
+        });
+      });
+
+      // Phone number validation
+      document.getElementById('userPhone').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+      });
+
+      // Loan amount warning
+      document.getElementById('loanAmount').addEventListener('input', function(e) {
+        const warning = document.getElementById('loanAmountWarning');
+        const value = this.value;
+        
+        // Show warning if user enters 4 or more digits
+        if (value.length >= 4 || parseFloat(value) >= 1000) {
+          warning.style.display = 'block';
+        } else {
+          warning.style.display = 'none';
+        }
+      });
+    }
+
+    function updateProgress(step) {
+      const totalSteps = 7;
+      const progress = (step / totalSteps) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    function nextStep(current) {
+      if (current === 1) {
+        const creditScore = document.getElementById('creditScore').value;
+        if (!creditScore || creditScore < 300 || creditScore > 900) {
+          showError('Please enter a valid credit score between 300 and 900');
+          return;
+        }
+        selectedCreditScore = parseInt(creditScore);
+      }
+      if (current === 2) {
+        const loanAmount = document.getElementById('loanAmount').value;
+        if (!loanAmount || loanAmount <= 0) {
+          showError('Please enter a valid loan amount');
+          return;
+        }
+        // Check if user entered full amount instead of lakhs (more than 999)
+        if (parseFloat(loanAmount) > 999) {
+          showError('Please enter amount in Lakhs only (e.g., 45.5 for ₹45,50,000)');
+          return;
+        }
+      }
+      if (current === 3) {
+        const roi = document.getElementById('currentROI').value;
+        if (!roi || roi <= 0 || roi > 20) {
+          showError('Please enter a valid interest rate');
+          return;
+        }
+      }
+      if (current === 4) {
+        const totalTenure = document.getElementById('totalTenure').value;
+        if (!totalTenure || totalTenure <= 0 || totalTenure > 30) {
+          showError('Please enter a valid total tenure');
+          return;
+        }
+      }
+      if (current === 5) {
+        const remainingTenure = parseFloat(document.getElementById('remainingTenure').value);
+        const totalTenure = parseFloat(document.getElementById('totalTenure').value);
+        if (!remainingTenure || remainingTenure <= 0) {
+          showError('Please enter a valid remaining tenure');
+          return;
+        }
+        if (remainingTenure > totalTenure) {
+          showError('Remaining tenure cannot be more than total tenure');
+          return;
+        }
+      }
+      if (current === 6 && !selectedKHATA) {
+        showError('Please select your KHATA type');
+        return;
+      }
+      if (current === 7 && !selectedCategory) {
+        showError('Please select bank category');
+        return;
+      }
+
+      hideError();
+      document.getElementById(`step${current}`).classList.remove('active');
+      document.getElementById(`step${current + 1}`).classList.add('active');
+      updateProgress(current + 1);
+    }
+
+    function backStep(current) {
+      document.getElementById(`step${current}`).classList.remove('active');
+      document.getElementById(`step${current - 1}`).classList.add('active');
+      updateProgress(current - 1);
+      
+      // Hide loan amount warning when going back to step 2
+      if (current === 3) {
+        document.getElementById('loanAmountWarning').style.display = 'none';
+      }
+    }
+
+    function calculateEMI(principal, rate, months) {
+      const monthlyRate = rate / 100 / 12;
+      if (monthlyRate === 0) return principal / months;
+      return (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+             (Math.pow(1 + monthlyRate, months) - 1);
+    }
+
+    function calculateRemainingBalance(principal, rate, totalMonths, paidMonths) {
+      const monthlyRate = rate / 100 / 12;
+      if (monthlyRate === 0) {
+        return principal * (totalMonths - paidMonths) / totalMonths;
+      }
+      
+      // Formula: P * [(1+r)^N - (1+r)^n] / [(1+r)^N - 1]
+      const numerator = Math.pow(1 + monthlyRate, totalMonths) - Math.pow(1 + monthlyRate, paidMonths);
+      const denominator = Math.pow(1 + monthlyRate, totalMonths) - 1;
+      
+      return principal * (numerator / denominator);
+    }
+
+    function calculateFinalResult() {
+      if (!selectedCategory) {
+        showError('Please select bank category');
+        return;
+      }
+
+      hideError();
+      document.getElementById('step7').classList.remove('active');
+      document.getElementById('loader').style.display = 'block';
+
+      // Reload data before calculation to ensure freshness
+      console.log('Fetching latest bank data before calculation...');
+      loadBankData(() => {
+        // Process calculation after data is loaded
+        setTimeout(() => {
+          const totalLoanAmount = parseFloat(document.getElementById('loanAmount').value) * 100000;
+          const currentROI = parseFloat(document.getElementById('currentROI').value);
+          const totalTenure = parseFloat(document.getElementById('totalTenure').value);
+          const remainingTenure = parseFloat(document.getElementById('remainingTenure').value);
+          const creditScore = selectedCreditScore;
+
+          // Calculate tenure passed
+          const tenurePassed = totalTenure - remainingTenure;
+          const totalMonths = totalTenure * 12;
+          const remainingMonths = remainingTenure * 12;
+          const paidMonths = tenurePassed * 12;
+
+          // Calculate current EMI (based on total loan amount and total tenure)
+          const currentEMI = calculateEMI(totalLoanAmount, currentROI, totalMonths);
+
+          // Calculate remaining balance
+          const remainingBalance = calculateRemainingBalance(totalLoanAmount, currentROI, totalMonths, paidMonths);
+
+          console.log('Loan calculations:', {
+            totalLoanAmount: totalLoanAmount / 100000 + ' L',
+            remainingBalance: (remainingBalance / 100000).toFixed(2) + ' L',
+            tenurePassed: tenurePassed + ' years',
+            currentEMI: currentEMI.toFixed(0)
+          });
+
+          // Find eligible banks based on all criteria
+          const eligibleBanks = bankData.filter(row => {
+            const minScore = row['SCORE MIN'];
+            const maxScore = row['SCORE MAX'];
+            
+            // Check credit score
+            if (creditScore < minScore || creditScore > maxScore) return false;
+            
+            // Check KHATA type
+            if (!row[selectedKHATA] || row[selectedKHATA] === '') return false;
+            
+            // Check bank category
+            if (selectedCategory === 'G') {
+              // Nationalised banks only
+              if (!row['G'] || row['G'] === '') return false;
+            } else {
+              // All banks (check F column)
+              if (!row['F'] || row['F'] === '') return false;
+            }
+            
+            return true;
+          });
+
+          console.log('Filtering criteria:', {
+            creditScore,
+            selectedKHATA,
+            selectedCategory,
+            currentROI
+          });
+          console.log('Eligible banks found:', eligibleBanks.length);
+
+          if (eligibleBanks.length === 0) {
+            showError('No banks found matching your criteria. Try selecting "All Banks" for more options.');
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('step7').classList.add('active');
+            return;
+          }
+
+          // Sort eligible banks by ROI to find the best rate
+          eligibleBanks.sort((a, b) => a.ROI - b.ROI);
+          
+          // Log all eligible banks with their ROIs
+          console.log('Eligible banks sorted by ROI:');
+          eligibleBanks.forEach(bank => {
+            console.log(`${bank.BANK}: ${bank.ROI}%`);
+          });
+
+          // Get the bank with lowest ROI
+          const bestBank = eligibleBanks[0];
+          // Calculate best EMI based on remaining balance and remaining tenure
+          const lowestEMI = calculateEMI(remainingBalance, bestBank.ROI, remainingMonths);
+
+          console.log('Best bank:', bestBank.BANK, 'with ROI', bestBank.ROI + '%');
+          console.log('Best EMI calculation:', {
+            remainingBalance: (remainingBalance / 100000).toFixed(2) + ' L',
+            bestROI: bestBank.ROI + '%',
+            remainingMonths: remainingMonths,
+            bestEMI: lowestEMI.toFixed(0)
+          });
+
+          // Store calculation data
+          calculationData = {
+            creditScore: creditScore,
+            totalLoanAmount: totalLoanAmount / 100000,
+            currentROI: currentROI,
+            totalTenure: totalTenure,
+            remainingTenure: remainingTenure,
+            remainingBalance: remainingBalance / 100000,
+            KHATAType: document.querySelector('.KHATA-option.selected').textContent,
+            bankCategory: document.querySelector('.category-option.selected h4').textContent,
+            currentEMI: currentEMI,
+            bestBank: bestBank.BANK,
+            bestROI: bestBank.ROI,
+            bestEMI: lowestEMI,
+            monthlySavings: currentEMI - lowestEMI,
+            totalSavings: (currentEMI - lowestEMI) * remainingMonths
+          };
+
+          // Display results
+          if (currentROI <= bestBank.ROI) {
+            document.getElementById('currentEMI').textContent = 
+              `₹${currentEMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('bestEMI').textContent = 
+              `₹${currentEMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('bestBank').textContent = 'Your current rate is the best!';
+            document.getElementById('bestROI').textContent = `${currentROI}%`;
+            document.getElementById('totalSavings').textContent = '₹0';
+            document.getElementById('monthlySavings').textContent = '₹0';
+          } else {
+            const totalSavings = (currentEMI - lowestEMI) * remainingMonths;
+            const monthlySavings = currentEMI - lowestEMI;
+            
+            document.getElementById('currentEMI').textContent = 
+              `₹${currentEMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('bestEMI').textContent = 
+              `₹${lowestEMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('bestBank').textContent = bestBank.BANK;
+            document.getElementById('bestROI').textContent = `${bestBank.ROI}%`;
+            document.getElementById('totalSavings').textContent = 
+              `₹${totalSavings.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('monthlySavings').textContent = 
+              `₹${monthlySavings.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+          }
+
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('finalResult').style.display = 'block';
+        }, 2000);
+      });
+    }
+
+    function showCallbackForm() {
+      document.getElementById('finalResult').style.display = 'none';
+      document.getElementById('callbackForm').style.display = 'block';
+    }
+
+    function backToResults() {
+      document.getElementById('callbackForm').style.display = 'none';
+      document.getElementById('finalResult').style.display = 'block';
+    }
+
+    function submitCallback() {
+      const name = document.getElementById('userName').value.trim();
+      const email = document.getElementById('userEmail').value.trim();
+      const phone = document.getElementById('userPhone').value.trim();
+
+      // Validation
+      if (!name) {
+        showFormError('Please enter your name');
+        return;
+      }
+      if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        showFormError('Please enter a valid email address');
+        return;
+      }
+      if (!phone || phone.length !== 10) {
+        showFormError('Please enter a valid 10-digit phone number');
+        return;
+      }
+
+      hideFormError();
+      
+      // Prepare data for Google Sheets with additional fields
+      const formData = {
+        timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        name: name,
+        email: email,
+        phone: phone,
+        creditScore: calculationData.creditScore || '',
+        RemainingBalance: calculationData.RemainingBalance === 'number' ? calculationData.RemainingBalance.toFixed(2) : '',
+        currentROI: calculationData.currentROI || '',
+        RemainingTenure: calculationData.RemainingTenure || '',
+        khataType: calculationData.KHATAType || ''
+             };
+
+      // Show loading
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('callbackForm').style.display = 'none';
+
+      // Submit to Google Sheets
+      fetch(LEADS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(() => {
+        console.log('Form submitted successfully with data:', formData);
+        showThankYou();
+      })
+      .catch(error => {
+        console.error('Error submitting form:', error);
+        showThankYou(); // Show thank you anyway
+      });
+    }
+
+    function showThankYou() {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('thankYou').style.display = 'block';
+      
+      // Countdown and redirect
+      let countdown = 5;
+      const countdownElement = document.getElementById('countdown');
+      
+      const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = countdown;
+        
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          window.location.href = 'https://www.nobroker.in/';
+        }
+      }, 1000);
+    }
+
+    function reloadAndRestart() {
+      console.log('Restarting calculator...');
+      
+      // Reset all selections and variables
+      selectedCreditScore = null;
+      selectedKHATA = null;
+      selectedCategory = null;
+      calculationData = {};
+      
+      // Clear all inputs
+      document.getElementById('creditScore').value = '';
+      document.getElementById('loanAmount').value = '';
+      document.getElementById('currentROI').value = '';
+      document.getElementById('totalTenure').value = '';
+      document.getElementById('remainingTenure').value = '';
+      document.getElementById('userName').value = '';
+      document.getElementById('userEmail').value = '';
+      document.getElementById('userPhone').value = '';
+      
+      // Hide loan amount warning
+      document.getElementById('loanAmountWarning').style.display = 'none';
+      
+      // Remove selected classes
+      document.querySelectorAll('.KHATA-option.selected').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('.category-option.selected').forEach(el => el.classList.remove('selected'));
+      
+      // Hide all sections
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      document.querySelectorAll('.result-section').forEach(section => section.style.display = 'none');
+      document.getElementById('loader').style.display = 'none';
+      
+      // Show first step
+      document.getElementById('step1').classList.add('active');
+      updateProgress(1);
+      
+      // Reload bank data
+      console.log('Fetching fresh bank data for new calculation...');
+      loadBankData(() => {
+        console.log('Fresh bank data loaded successfully');
+      });
+    }
+
+    function showError(message) {
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+      setTimeout(() => {
+        errorMsg.style.display = 'none';
+      }, 5000);
+    }
+
+    function hideError() {
+      document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    function showFormError(message) {
+      const errorMsg = document.getElementById('formError');
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+    }
+
+    function hideFormError() {
+      document.getElementById('formError').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
